@@ -5,7 +5,6 @@ from django.template.defaultfilters import time as format_time
 
 from nautobot.core.formats import PreferredTimeFormat
 
-
 register = template.Library()
 
 
