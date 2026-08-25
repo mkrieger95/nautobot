@@ -6,7 +6,6 @@ from django.conf import settings
 
 from nautobot.core.formats import PreferredTimeFormat
 
-
 _TIME_FORMAT_SETTINGS = frozenset({"DATETIME_FORMAT", "SHORT_DATETIME_FORMAT", "TIME_FORMAT"})
 _PREFERRED_LITERAL_FORMATS = frozenset({"Y-m-d H:i:s.u"})
 
