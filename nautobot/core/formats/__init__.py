@@ -2,7 +2,6 @@
 
 from contextvars import ContextVar
 
-
 TIME_FORMAT_12_HOUR = "12-hour"
 TIME_FORMAT_24_HOUR = "24-hour"
 TIME_FORMAT_PREFERENCES = frozenset({TIME_FORMAT_12_HOUR, TIME_FORMAT_24_HOUR})
@@ -53,47 +52,47 @@ def apply_time_format_preference(format_string, preference=None):
     index = 0
 
     while index < len(format_string):
-        token = format_string[index]
+        format_char = format_string[index]
 
         # Preserve escaped Django format characters as-is.
-        if token == "\\" and index + 1 < len(format_string):
+        if format_char == "\\" and index + 1 < len(format_string):
             output.append(format_string[index : index + 2])
             index += 2
             continue
 
         if preference == TIME_FORMAT_12_HOUR:
-            if token in "gGhH":
+            if format_char in "gGhH":
                 output.append("g")
                 has_hour = True
                 last_clock_output_index = len(output)
-            elif token == "f":
-                output.append(token)
+            elif format_char == "f":
+                output.append(format_char)
                 has_hour = True
                 last_clock_output_index = len(output)
-            elif token == "P":
-                output.append(token)
+            elif format_char == "P":
+                output.append(format_char)
                 has_hour = True
                 has_meridiem = True
                 last_clock_output_index = len(output)
             else:
-                output.append(token)
-                if has_hour and token in {"i", "s", "u"}:
+                output.append(format_char)
+                if has_hour and format_char in {"i", "s", "u"}:
                     last_clock_output_index = len(output)
-                if token in {"a", "A"}:
+                if format_char in {"a", "A"}:
                     has_meridiem = True
         else:
-            if token in "gGhH":
+            if format_char in "gGhH":
                 output.append("H")
                 has_hour = True
-            elif token in {"f", "P"}:
+            elif format_char in {"f", "P"}:
                 output.append("H:i")
                 has_hour = True
-            elif token in {"a", "A"}:
+            elif format_char in {"a", "A"}:
                 removed_meridiem = True
                 if output and output[-1].isspace():
                     output.pop()
             else:
-                output.append(token)
+                output.append(format_char)
 
         index += 1
 
